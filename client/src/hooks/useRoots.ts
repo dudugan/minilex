@@ -13,6 +13,7 @@ export function useRoots() {
   const [roots, setRoots] = useState<Root[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
+//   const API_BASE = 'http://localhost:3000'
 
   const fetchRoots = useCallback(async () => {
     setLoading(true); 
@@ -57,7 +58,6 @@ export function useRoots() {
     const deleteRoot = async (id: number) => {
         await fetch(`/api/roots/${id}`, {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
         })
         await fetchRoots() 
     }
