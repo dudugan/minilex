@@ -1,4 +1,5 @@
 // import { useState } from 'react'
+// import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import RootsPage from './pages/RootsPage'
 
@@ -6,7 +7,7 @@ import RootsPage from './pages/RootsPage'
 // import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       {/* You can add a Nav here later */}
@@ -51,5 +52,3 @@ function App() {
   //   </>
   // )
 }
-
-export default App
