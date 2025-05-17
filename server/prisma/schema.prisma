@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Root {
+  id         Int      @id @default(autoincrement())
+  phono      String
+  ortho      String
+  definition String
+  notes      String
+  etymology  String
+  words      Word[]
+}
+
+model Word {
+  id    Int     @id @default(autoincrement())
+  phono String
+  ortho String
+  type  String  // "stem" or "infl"
+  roots Root[]
+  senses Sense[]
+}
+
+model Sense {
+  id          Int       @id @default(autoincrement())
+  gloss       String
+  definition  String
+  notes       String
+  wordId      Int
+  word        Word      @relation(fields: [wordId], references: [id])
+  categoryId  Int
+  category    Category  @relation(fields: [categoryId], references: [id])
+  features    Feature[]
+}
+
+model Category {
+  id            Int             @id @default(autoincrement())
+  name          String
+  features      Feature[]
+  grammarTables GrammarTable[]
+  senses        Sense[]
+}
+
+model Feature {
+  id         Int            @id @default(autoincrement())
+  name       String
+  categories Category[]     
+  senses     Sense[]  
+  rows       GrammarRow[]
+  cols       GrammarCol[]
+}
+
+model GrammarTable {
+  id            Int          @id @default(autoincrement())
+  name          String
+  categories    Category[] 
+  rows          GrammarRow[]
+  cols          GrammarCol[]
+}
+
+model GrammarRow {
+  id             Int           @id @default(autoincrement())
+  grammarTableId Int
+  grammarTable   GrammarTable  @relation(fields: [grammarTableId], references: [id])
+  featureId      Int
+  feature        Feature       @relation(fields: [featureId], references: [id])
+  cells          GrammarCell[]
+}
+
+model GrammarCol {
+  id             Int           @id @default(autoincrement())
+  grammarTableId Int
+  grammarTable   GrammarTable  @relation(fields: [grammarTableId], references: [id])
+  featureId      Int
+  feature        Feature       @relation(fields: [featureId], references: [id])
+  cells          GrammarCell[]
+}
+
+model GrammarCell {
+  rowId    Int
+  colId    Int
+  row      GrammarRow @relation(fields: [rowId], references: [id])
+  col      GrammarCol @relation(fields: [colId], references: [id])
+  cellText String
+  @@id([rowId, colId])
+}
