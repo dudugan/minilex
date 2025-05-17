@@ -3,15 +3,14 @@ import { useRoots } from '../hooks/useRoots'
 
 export default function RootsPage() {
   const { roots, loading, error, createRoot, updateRoot, deleteRoot, reload } = useRoots()
+  const [newPhono, setNewPhono] = useState('')
+  const [newOrtho, setNewOrtho] = useState('')
+  const [newDefinition, setNewDefinition] = useState('')
 
   console.log('RootsPage render, roots =', roots, 'loading=', loading)
 
   if (loading) return <p>Loading…</p>
   if (error)   return <p>Error: {error}</p>
-
-  const [newPhono, setNewPhono] = useState('')
-  const [newOrtho, setNewOrtho] = useState('')
-  const [newDefinition, setNewDefinition] = useState('')
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
