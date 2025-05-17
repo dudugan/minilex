@@ -12,13 +12,13 @@ export interface RootCreateBody {
 }
 
 const rootsRoutes: FastifyPluginAsync = async (app) => {
-  // GET /roots
+  // GET/READ /roots
   app.get('/', async (_req, reply: FastifyReply) => {
     const roots = await prisma.root.findMany()
     return reply.send(roots)
   })
 
-  // GET /roots/:id
+  // GET/READ /roots/:id
   app.get<{ Params: { id: string } }>('/:id', async (req, reply) => {
     const root = await prisma.root.findUnique({
       where: { id: Number(req.params.id) }
@@ -27,14 +27,14 @@ const rootsRoutes: FastifyPluginAsync = async (app) => {
     return root
   })
 
-  // POST /roots
+  // POST/CREATE /roots
   app.post<{ Body: RootCreateBody }>('/', async (req, reply) => {
     const data = req.body
     const newRoot = await prisma.root.create({ data })
     return reply.status(201).send(newRoot)
   })
 
-  // PUT /roots/:id
+  // PUT/UPDATE /roots/:id
   app.put<{ Params: { id: string }; Body: Partial<RootCreateBody> }>(
     '/:id', async (req, reply) => {
       const id = Number(req.params.id)
