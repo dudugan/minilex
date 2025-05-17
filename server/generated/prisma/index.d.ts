@@ -2091,9 +2091,9 @@ export namespace Prisma {
     id: number
     phono: string
     ortho: string
-    definition: string
-    notes: string
-    etymology: string
+    definition: string | null
+    notes: string | null
+    etymology: string | null
     _count: RootCountAggregateOutputType | null
     _avg: RootAvgAggregateOutputType | null
     _sum: RootSumAggregateOutputType | null
@@ -2170,9 +2170,9 @@ export namespace Prisma {
       id: number
       phono: string
       ortho: string
-      definition: string
-      notes: string
-      etymology: string
+      definition: string | null
+      notes: string | null
+      etymology: string | null
     }, ExtArgs["result"]["root"]>
     composites: {}
   }
@@ -4330,8 +4330,8 @@ export namespace Prisma {
   export type SenseGroupByOutputType = {
     id: number
     gloss: string
-    definition: string
-    notes: string
+    definition: string | null
+    notes: string | null
     wordId: number
     categoryId: number
     _count: SenseCountAggregateOutputType | null
@@ -4425,8 +4425,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       gloss: string
-      definition: string
-      notes: string
+      definition: string | null
+      notes: string | null
       wordId: number
       categoryId: number
     }, ExtArgs["result"]["sense"]>
@@ -12082,6 +12082,14 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
   /**
    * Field references
    */
@@ -12118,9 +12126,9 @@ export namespace Prisma {
     id?: IntFilter<"Root"> | number
     phono?: StringFilter<"Root"> | string
     ortho?: StringFilter<"Root"> | string
-    definition?: StringFilter<"Root"> | string
-    notes?: StringFilter<"Root"> | string
-    etymology?: StringFilter<"Root"> | string
+    definition?: StringNullableFilter<"Root"> | string | null
+    notes?: StringNullableFilter<"Root"> | string | null
+    etymology?: StringNullableFilter<"Root"> | string | null
     words?: WordListRelationFilter
   }
 
@@ -12128,9 +12136,9 @@ export namespace Prisma {
     id?: SortOrder
     phono?: SortOrder
     ortho?: SortOrder
-    definition?: SortOrder
-    notes?: SortOrder
-    etymology?: SortOrder
+    definition?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    etymology?: SortOrderInput | SortOrder
     words?: WordOrderByRelationAggregateInput
   }
 
@@ -12141,9 +12149,9 @@ export namespace Prisma {
     NOT?: RootWhereInput | RootWhereInput[]
     phono?: StringFilter<"Root"> | string
     ortho?: StringFilter<"Root"> | string
-    definition?: StringFilter<"Root"> | string
-    notes?: StringFilter<"Root"> | string
-    etymology?: StringFilter<"Root"> | string
+    definition?: StringNullableFilter<"Root"> | string | null
+    notes?: StringNullableFilter<"Root"> | string | null
+    etymology?: StringNullableFilter<"Root"> | string | null
     words?: WordListRelationFilter
   }, "id">
 
@@ -12151,9 +12159,9 @@ export namespace Prisma {
     id?: SortOrder
     phono?: SortOrder
     ortho?: SortOrder
-    definition?: SortOrder
-    notes?: SortOrder
-    etymology?: SortOrder
+    definition?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    etymology?: SortOrderInput | SortOrder
     _count?: RootCountOrderByAggregateInput
     _avg?: RootAvgOrderByAggregateInput
     _max?: RootMaxOrderByAggregateInput
@@ -12168,9 +12176,9 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Root"> | number
     phono?: StringWithAggregatesFilter<"Root"> | string
     ortho?: StringWithAggregatesFilter<"Root"> | string
-    definition?: StringWithAggregatesFilter<"Root"> | string
-    notes?: StringWithAggregatesFilter<"Root"> | string
-    etymology?: StringWithAggregatesFilter<"Root"> | string
+    definition?: StringNullableWithAggregatesFilter<"Root"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"Root"> | string | null
+    etymology?: StringNullableWithAggregatesFilter<"Root"> | string | null
   }
 
   export type WordWhereInput = {
@@ -12234,8 +12242,8 @@ export namespace Prisma {
     NOT?: SenseWhereInput | SenseWhereInput[]
     id?: IntFilter<"Sense"> | number
     gloss?: StringFilter<"Sense"> | string
-    definition?: StringFilter<"Sense"> | string
-    notes?: StringFilter<"Sense"> | string
+    definition?: StringNullableFilter<"Sense"> | string | null
+    notes?: StringNullableFilter<"Sense"> | string | null
     wordId?: IntFilter<"Sense"> | number
     categoryId?: IntFilter<"Sense"> | number
     word?: XOR<WordScalarRelationFilter, WordWhereInput>
@@ -12246,8 +12254,8 @@ export namespace Prisma {
   export type SenseOrderByWithRelationInput = {
     id?: SortOrder
     gloss?: SortOrder
-    definition?: SortOrder
-    notes?: SortOrder
+    definition?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
     wordId?: SortOrder
     categoryId?: SortOrder
     word?: WordOrderByWithRelationInput
@@ -12261,8 +12269,8 @@ export namespace Prisma {
     OR?: SenseWhereInput[]
     NOT?: SenseWhereInput | SenseWhereInput[]
     gloss?: StringFilter<"Sense"> | string
-    definition?: StringFilter<"Sense"> | string
-    notes?: StringFilter<"Sense"> | string
+    definition?: StringNullableFilter<"Sense"> | string | null
+    notes?: StringNullableFilter<"Sense"> | string | null
     wordId?: IntFilter<"Sense"> | number
     categoryId?: IntFilter<"Sense"> | number
     word?: XOR<WordScalarRelationFilter, WordWhereInput>
@@ -12273,8 +12281,8 @@ export namespace Prisma {
   export type SenseOrderByWithAggregationInput = {
     id?: SortOrder
     gloss?: SortOrder
-    definition?: SortOrder
-    notes?: SortOrder
+    definition?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
     wordId?: SortOrder
     categoryId?: SortOrder
     _count?: SenseCountOrderByAggregateInput
@@ -12290,8 +12298,8 @@ export namespace Prisma {
     NOT?: SenseScalarWhereWithAggregatesInput | SenseScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Sense"> | number
     gloss?: StringWithAggregatesFilter<"Sense"> | string
-    definition?: StringWithAggregatesFilter<"Sense"> | string
-    notes?: StringWithAggregatesFilter<"Sense"> | string
+    definition?: StringNullableWithAggregatesFilter<"Sense"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"Sense"> | string | null
     wordId?: IntWithAggregatesFilter<"Sense"> | number
     categoryId?: IntWithAggregatesFilter<"Sense"> | number
   }
@@ -12603,9 +12611,9 @@ export namespace Prisma {
   export type RootCreateInput = {
     phono: string
     ortho: string
-    definition: string
-    notes: string
-    etymology: string
+    definition?: string | null
+    notes?: string | null
+    etymology?: string | null
     words?: WordCreateNestedManyWithoutRootsInput
   }
 
@@ -12613,18 +12621,18 @@ export namespace Prisma {
     id?: number
     phono: string
     ortho: string
-    definition: string
-    notes: string
-    etymology: string
+    definition?: string | null
+    notes?: string | null
+    etymology?: string | null
     words?: WordUncheckedCreateNestedManyWithoutRootsInput
   }
 
   export type RootUpdateInput = {
     phono?: StringFieldUpdateOperationsInput | string
     ortho?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
-    etymology?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    etymology?: NullableStringFieldUpdateOperationsInput | string | null
     words?: WordUpdateManyWithoutRootsNestedInput
   }
 
@@ -12632,9 +12640,9 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     phono?: StringFieldUpdateOperationsInput | string
     ortho?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
-    etymology?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    etymology?: NullableStringFieldUpdateOperationsInput | string | null
     words?: WordUncheckedUpdateManyWithoutRootsNestedInput
   }
 
@@ -12642,26 +12650,26 @@ export namespace Prisma {
     id?: number
     phono: string
     ortho: string
-    definition: string
-    notes: string
-    etymology: string
+    definition?: string | null
+    notes?: string | null
+    etymology?: string | null
   }
 
   export type RootUpdateManyMutationInput = {
     phono?: StringFieldUpdateOperationsInput | string
     ortho?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
-    etymology?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    etymology?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RootUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     phono?: StringFieldUpdateOperationsInput | string
     ortho?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
-    etymology?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    etymology?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type WordCreateInput = {
@@ -12720,8 +12728,8 @@ export namespace Prisma {
 
   export type SenseCreateInput = {
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     word: WordCreateNestedOneWithoutSensesInput
     category: CategoryCreateNestedOneWithoutSensesInput
     features?: FeatureCreateNestedManyWithoutSensesInput
@@ -12730,8 +12738,8 @@ export namespace Prisma {
   export type SenseUncheckedCreateInput = {
     id?: number
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     wordId: number
     categoryId: number
     features?: FeatureUncheckedCreateNestedManyWithoutSensesInput
@@ -12739,8 +12747,8 @@ export namespace Prisma {
 
   export type SenseUpdateInput = {
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     word?: WordUpdateOneRequiredWithoutSensesNestedInput
     category?: CategoryUpdateOneRequiredWithoutSensesNestedInput
     features?: FeatureUpdateManyWithoutSensesNestedInput
@@ -12749,8 +12757,8 @@ export namespace Prisma {
   export type SenseUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     wordId?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
     features?: FeatureUncheckedUpdateManyWithoutSensesNestedInput
@@ -12759,23 +12767,23 @@ export namespace Prisma {
   export type SenseCreateManyInput = {
     id?: number
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     wordId: number
     categoryId: number
   }
 
   export type SenseUpdateManyMutationInput = {
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SenseUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     wordId?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
   }
@@ -13065,10 +13073,29 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type WordListRelationFilter = {
     every?: WordWhereInput
     some?: WordWhereInput
     none?: WordWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type WordOrderByRelationAggregateInput = {
@@ -13141,6 +13168,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type RootListRelationFilter = {
@@ -13497,6 +13541,10 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type WordUpdateManyWithoutRootsNestedInput = {
@@ -14272,6 +14320,20 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -14314,6 +14376,34 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type WordCreateWithoutRootsInput = {
@@ -14365,18 +14455,18 @@ export namespace Prisma {
   export type RootCreateWithoutWordsInput = {
     phono: string
     ortho: string
-    definition: string
-    notes: string
-    etymology: string
+    definition?: string | null
+    notes?: string | null
+    etymology?: string | null
   }
 
   export type RootUncheckedCreateWithoutWordsInput = {
     id?: number
     phono: string
     ortho: string
-    definition: string
-    notes: string
-    etymology: string
+    definition?: string | null
+    notes?: string | null
+    etymology?: string | null
   }
 
   export type RootCreateOrConnectWithoutWordsInput = {
@@ -14386,8 +14476,8 @@ export namespace Prisma {
 
   export type SenseCreateWithoutWordInput = {
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     category: CategoryCreateNestedOneWithoutSensesInput
     features?: FeatureCreateNestedManyWithoutSensesInput
   }
@@ -14395,8 +14485,8 @@ export namespace Prisma {
   export type SenseUncheckedCreateWithoutWordInput = {
     id?: number
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     categoryId: number
     features?: FeatureUncheckedCreateNestedManyWithoutSensesInput
   }
@@ -14433,9 +14523,9 @@ export namespace Prisma {
     id?: IntFilter<"Root"> | number
     phono?: StringFilter<"Root"> | string
     ortho?: StringFilter<"Root"> | string
-    definition?: StringFilter<"Root"> | string
-    notes?: StringFilter<"Root"> | string
-    etymology?: StringFilter<"Root"> | string
+    definition?: StringNullableFilter<"Root"> | string | null
+    notes?: StringNullableFilter<"Root"> | string | null
+    etymology?: StringNullableFilter<"Root"> | string | null
   }
 
   export type SenseUpsertWithWhereUniqueWithoutWordInput = {
@@ -14460,8 +14550,8 @@ export namespace Prisma {
     NOT?: SenseScalarWhereInput | SenseScalarWhereInput[]
     id?: IntFilter<"Sense"> | number
     gloss?: StringFilter<"Sense"> | string
-    definition?: StringFilter<"Sense"> | string
-    notes?: StringFilter<"Sense"> | string
+    definition?: StringNullableFilter<"Sense"> | string | null
+    notes?: StringNullableFilter<"Sense"> | string | null
     wordId?: IntFilter<"Sense"> | number
     categoryId?: IntFilter<"Sense"> | number
   }
@@ -14638,8 +14728,8 @@ export namespace Prisma {
 
   export type SenseCreateWithoutCategoryInput = {
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     word: WordCreateNestedOneWithoutSensesInput
     features?: FeatureCreateNestedManyWithoutSensesInput
   }
@@ -14647,8 +14737,8 @@ export namespace Prisma {
   export type SenseUncheckedCreateWithoutCategoryInput = {
     id?: number
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     wordId: number
     features?: FeatureUncheckedCreateNestedManyWithoutSensesInput
   }
@@ -14738,8 +14828,8 @@ export namespace Prisma {
 
   export type SenseCreateWithoutFeaturesInput = {
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     word: WordCreateNestedOneWithoutSensesInput
     category: CategoryCreateNestedOneWithoutSensesInput
   }
@@ -14747,8 +14837,8 @@ export namespace Prisma {
   export type SenseUncheckedCreateWithoutFeaturesInput = {
     id?: number
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     wordId: number
     categoryId: number
   }
@@ -15350,41 +15440,41 @@ export namespace Prisma {
   export type SenseCreateManyWordInput = {
     id?: number
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     categoryId: number
   }
 
   export type RootUpdateWithoutWordsInput = {
     phono?: StringFieldUpdateOperationsInput | string
     ortho?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
-    etymology?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    etymology?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RootUncheckedUpdateWithoutWordsInput = {
     id?: IntFieldUpdateOperationsInput | number
     phono?: StringFieldUpdateOperationsInput | string
     ortho?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
-    etymology?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    etymology?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RootUncheckedUpdateManyWithoutWordsInput = {
     id?: IntFieldUpdateOperationsInput | number
     phono?: StringFieldUpdateOperationsInput | string
     ortho?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
-    etymology?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    etymology?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SenseUpdateWithoutWordInput = {
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     category?: CategoryUpdateOneRequiredWithoutSensesNestedInput
     features?: FeatureUpdateManyWithoutSensesNestedInput
   }
@@ -15392,8 +15482,8 @@ export namespace Prisma {
   export type SenseUncheckedUpdateWithoutWordInput = {
     id?: IntFieldUpdateOperationsInput | number
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     categoryId?: IntFieldUpdateOperationsInput | number
     features?: FeatureUncheckedUpdateManyWithoutSensesNestedInput
   }
@@ -15401,8 +15491,8 @@ export namespace Prisma {
   export type SenseUncheckedUpdateManyWithoutWordInput = {
     id?: IntFieldUpdateOperationsInput | number
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     categoryId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -15429,8 +15519,8 @@ export namespace Prisma {
   export type SenseCreateManyCategoryInput = {
     id?: number
     gloss: string
-    definition: string
-    notes: string
+    definition?: string | null
+    notes?: string | null
     wordId: number
   }
 
@@ -15474,8 +15564,8 @@ export namespace Prisma {
 
   export type SenseUpdateWithoutCategoryInput = {
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     word?: WordUpdateOneRequiredWithoutSensesNestedInput
     features?: FeatureUpdateManyWithoutSensesNestedInput
   }
@@ -15483,8 +15573,8 @@ export namespace Prisma {
   export type SenseUncheckedUpdateWithoutCategoryInput = {
     id?: IntFieldUpdateOperationsInput | number
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     wordId?: IntFieldUpdateOperationsInput | number
     features?: FeatureUncheckedUpdateManyWithoutSensesNestedInput
   }
@@ -15492,8 +15582,8 @@ export namespace Prisma {
   export type SenseUncheckedUpdateManyWithoutCategoryInput = {
     id?: IntFieldUpdateOperationsInput | number
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     wordId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -15527,8 +15617,8 @@ export namespace Prisma {
 
   export type SenseUpdateWithoutFeaturesInput = {
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     word?: WordUpdateOneRequiredWithoutSensesNestedInput
     category?: CategoryUpdateOneRequiredWithoutSensesNestedInput
   }
@@ -15536,8 +15626,8 @@ export namespace Prisma {
   export type SenseUncheckedUpdateWithoutFeaturesInput = {
     id?: IntFieldUpdateOperationsInput | number
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     wordId?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
   }
@@ -15545,8 +15635,8 @@ export namespace Prisma {
   export type SenseUncheckedUpdateManyWithoutFeaturesInput = {
     id?: IntFieldUpdateOperationsInput | number
     gloss?: StringFieldUpdateOperationsInput | string
-    definition?: StringFieldUpdateOperationsInput | string
-    notes?: StringFieldUpdateOperationsInput | string
+    definition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     wordId?: IntFieldUpdateOperationsInput | number
     categoryId?: IntFieldUpdateOperationsInput | number
   }

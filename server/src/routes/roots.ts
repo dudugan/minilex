@@ -6,9 +6,9 @@ const prisma = new PrismaClient()
 export interface RootCreateBody {
   phono: string
   ortho: string
-  definition: string
-  notes: string
-  etymology: string
+  definition?: string
+  notes?: string
+  etymology?: string
 }
 
 const rootsRoutes: FastifyPluginAsync = async (app) => {
