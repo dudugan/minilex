@@ -1,8 +1,8 @@
 import React, {useEffect, useState } from 'react'
 import { useSenses } from '../hooks/useSenses'
-import { useCategories } from '../hooks/useCategories'
-import { useFeatures } from '../hooks/useFeatures'
 import { useWords } from '../hooks/useWords'
+import { useFeatures } from '../hooks/useFeatures'
+import { useCategories } from '../hooks/useCategories'
 
 export default function SensesPage() {
   const { senses, loading, error, search, setSearch, reload, createSense, updateSense, deleteSense } = useSenses()

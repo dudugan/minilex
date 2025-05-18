@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from 'react'
+import { useFeatures } from '../hooks/useFeatures'
 import { useCategories } from '../hooks/useCategories'
 import { useSenses } from '../hooks/useSenses'
-import { useFeatures } from '../hooks/useFeatures'
 
 export default function FeaturesPage() {
   const { features, loading, error, search, setSearch, reload, createFeature, updateFeature, deleteFeature } = useFeatures()
