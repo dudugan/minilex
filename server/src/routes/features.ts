@@ -13,16 +13,20 @@ export interface FeatureCreateBody {
 const featuresRoutes: FastifyPluginAsync = async (app) => {
 
   // GET/READ /categories/:id
-  app.get<{ Params: { id: string } }>('/:id', async (req, reply) => {
+  app.get<{ Params: { id: string } }>
+  ('/:id', async (req, reply) => {
     const feature = await prisma.feature.findUnique({
       where: { id: Number(req.params.id) }
     })
-    if (!feature) return reply.status(404).send({ error: 'Not found' })
+    if (!feature) {
+      return reply.status(404).send({ error: 'Not found' })
+    }
     return feature
   })
 
   // GET/SEARCH (list=search with empty query)
-  app.get<{ Querystring: { search?: string } }>('/', async (req, reply) => {
+  app.get<{ Querystring: { search?: string } }>
+  ('/', async (req, reply) => {
     const { search } = req.query
     const where = search 
       ? {
@@ -37,7 +41,8 @@ const featuresRoutes: FastifyPluginAsync = async (app) => {
   })
 
   // POST/CREATE /features
-  app.post<{ Body: FeatureCreateBody }>('/', async (req, reply) => {
+  app.post<{ Body: FeatureCreateBody }>
+  ('/', async (req, reply) => {
     const {
       name, 
       senseIds, 
@@ -61,7 +66,8 @@ const featuresRoutes: FastifyPluginAsync = async (app) => {
   })
 
   // PUT/UPDATE /categories/:id
-  app.put<{ Params: { id: string }; Body: Partial<FeatureCreateBody> }>(
+  app.put<{ Params: { id: string }; 
+            Body: Partial<FeatureCreateBody> }>(
     '/:id', async (req, reply) => {
       const id = Number(req.params.id)
       const {
@@ -75,8 +81,12 @@ const featuresRoutes: FastifyPluginAsync = async (app) => {
           // guarded spreads
           data: {
             ...(name && { name }),
-            ...(senseIds && { senses: { set: senseIds.map((sid : number) => ({ id: sid })) } }),
-            ...(categoryIds && { categories: { set: categoryIds.map((cid : number) => ({ id: cid })) } })
+            ...(senseIds && { senses: 
+              { set: senseIds.map((sid : number) => 
+              ({ id: sid })) } }),
+            ...(categoryIds && { categories: 
+              { set: categoryIds.map((cid : number) => 
+              ({ id: cid })) } })
           }
         })
         return reply.send(updated)
@@ -88,7 +98,8 @@ const featuresRoutes: FastifyPluginAsync = async (app) => {
   )
 
   // DELETE /categories/:id
-  app.delete<{ Params: { id: string } }>('/:id', async (req, reply) => {
+  app.delete<{ Params: { id: string } }>
+  ('/:id', async (req, reply) => {
     const id = Number(req.params.id)
     try {
       await prisma.feature.delete({ where: { id } })

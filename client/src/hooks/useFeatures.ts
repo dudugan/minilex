@@ -45,7 +45,8 @@ export function useFeatures() {
     }
 
     // UPDATE ROOT
-    const updateFeature = async (id: number, data: Partial<Omit<Feature, 'id'>>) => {
+    const updateFeature = async (id: number, 
+        data: Partial<Omit<Feature, 'id'>>) => {
       await fetch(`/api/features/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -62,5 +63,7 @@ export function useFeatures() {
         await fetchFeatures() 
     }
 
-  return { features, loading, error, search, setSearch, reload: fetchFeatures, createFeature, updateFeature, deleteFeature }  
+  return { features, loading, error, search, 
+    setSearch, reload: fetchFeatures, createFeature, 
+    updateFeature, deleteFeature }  
 }

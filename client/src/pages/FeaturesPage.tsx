@@ -1,10 +1,12 @@
-import React, {useEffect, useState } from 'react'
+import React, {useState } from 'react'
 import { useFeatures } from '../hooks/useFeatures'
 import { useCategories } from '../hooks/useCategories'
 import { useSenses } from '../hooks/useSenses'
 
 export default function FeaturesPage() {
-  const { features, loading, error, search, setSearch, reload, createFeature, updateFeature, deleteFeature } = useFeatures()
+  const { features, loading, error, search, 
+    setSearch, reload, createFeature, 
+    updateFeature, deleteFeature } = useFeatures()
   const { categories } = useCategories()
   const { senses } = useSenses()
   
@@ -12,7 +14,8 @@ export default function FeaturesPage() {
   const [newSenseIds, setNewSenseIds] = useState<number[]>([])
   const [newCategoryIds, setNewCategoryIds] = useState<number[]>([])
 
-  console.log('FeaturesPage render, features =', features, 'loading=', loading)
+  console.log('FeaturesPage render, features =', features, 
+    'loading=', loading)
 
   if (loading) return <p>Loading…</p>
   if (error)   return <p>Error: {error}</p>
@@ -22,8 +25,10 @@ export default function FeaturesPage() {
     if (!newName) return
     await createFeature({ 
       name: newName,
-      senseIds: newSenseIds.length ? newSenseIds : undefined,
-      categoryIds: newCategoryIds.length ? newCategoryIds : undefined
+      senseIds: newSenseIds.length ? 
+        newSenseIds : undefined,
+      categoryIds: newCategoryIds.length ? 
+        newCategoryIds : undefined
     })
     setNewName('')
     setNewSenseIds([])
@@ -32,15 +37,18 @@ export default function FeaturesPage() {
 
   return (
     <div>
-      <h1>Features</h1>
+      <h1>features</h1>
       {/* SEARCH */}
       <div style={{ marginBottom: '1em' }}>
         <input
           type="text"
-          placeholder="search features"
+          placeholder="search"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          onKeyDown={e => e.key==='Enter' && reload()}
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              reload()
+            }}}
         /> 
         <button onClick={reload}>search</button>
       </div>
@@ -49,7 +57,7 @@ export default function FeaturesPage() {
       <form onSubmit={handleCreate} style={{ marginBottom: '1em' }}>
         <input
           type="text"
-          placeholder="name"
+          placeholder="feature"
           value={newName}
           onChange={e => setNewName(e.target.value)}
           required
@@ -88,7 +96,7 @@ export default function FeaturesPage() {
             </option>
           ))}
         </select>
-        <button type="submit">add feature</button>
+        <button type="submit">create</button>
     </form>
 
     {/* LIST OF FEATURES */}
@@ -96,6 +104,8 @@ export default function FeaturesPage() {
         {features.map(f => (
             <li key={f.id} style={{ marginBottom: '0.5em' }}>
                 <strong>{f.name}</strong>
+
+                {/* UD BUTTONS */}
                 <button 
                     style={{ marginLeft: '8' }}
                     onClick={() => {
@@ -125,9 +135,7 @@ export default function FeaturesPage() {
                     ))}
                   </select>
                 </label>
-                <label style={{ display: 'block', marginTop: '8' }}>
-                  categories:
-                  <select
+                <select
                     multiple
                     value={f.categoryIds?.map(String) || []}
                     onChange={e => {
@@ -143,8 +151,7 @@ export default function FeaturesPage() {
                         {c.name}
                       </option>
                     ))}
-                  </select>
-                </label>
+                </select>
                 <button 
                     style={{ marginLeft: '0.5em' }}
                     onClick={() => {

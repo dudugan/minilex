@@ -7,6 +7,7 @@ export interface Root {
   definition?: string
   notes?: string
   etymology?: string
+  wordIds?: number[]
 }
 
 export function useRoots() {
@@ -47,7 +48,8 @@ export function useRoots() {
     }
 
     // UPDATE ROOT
-    const updateRoot = async (id: number, data: Partial<Omit<Root, 'id'>>) => {
+    const updateRoot = async (id: number, 
+          data: Partial<Omit<Root, 'id'>>) => {
         await fetch(`/api/roots/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -63,5 +65,7 @@ export function useRoots() {
         await fetchRoots() 
     }
 
-  return { roots, loading, error, search, setSearch, reload: fetchRoots, createRoot, updateRoot, deleteRoot }  
+  return { roots, loading, error, search, 
+    setSearch, reload: fetchRoots, createRoot, 
+    updateRoot, deleteRoot }  
 }

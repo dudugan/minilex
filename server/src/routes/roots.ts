@@ -9,26 +9,26 @@ export interface RootCreateBody {
   definition?: string
   notes?: string
   etymology?: string
+  wordIds?: number[]
 }
 
 const rootsRoutes: FastifyPluginAsync = async (app) => {
-  // GET/READ /roots
-  // app.get('/', async (_req, reply: FastifyReply) => {
-  //   const roots = await prisma.root.findMany()
-  //   return reply.send(roots)
-  // })
 
   // GET/READ /roots/:id
-  app.get<{ Params: { id: string } }>('/:id', async (req, reply) => {
+  app.get<{ Params: { id: string } }>
+  ('/:id', async (req, reply) => {
     const root = await prisma.root.findUnique({
       where: { id: Number(req.params.id) }
     })
-    if (!root) return reply.status(404).send({ error: 'Not found' })
+    if (!root) {
+      return reply.status(404).send({ error: 'Not found' })
+    }
     return root
   })
 
   // GET/SEARCH (list=search with empty query)
-  app.get<{ Querystring: { search?: string } }>('/', async (req, reply) => {
+  app.get<{ Querystring: { search?: string } }>
+  ('/', async (req, reply) => {
     const { search } = req.query
     const where = search 
       ? {
@@ -48,21 +48,59 @@ const rootsRoutes: FastifyPluginAsync = async (app) => {
 
   // POST/CREATE /roots
   app.post<{ Body: RootCreateBody }>('/', async (req, reply) => {
-    const data = req.body
-    const newRoot = await prisma.root.create({ data })
+    const {
+      phono, 
+      ortho, 
+      definition, 
+      notes,
+      etymology,
+      wordIds
+    } = req.body
+    const newRoot = await prisma.root.create({
+      data: {
+        phono,
+        ortho,
+        definition,
+        notes,
+        etymology,
+        words: wordIds
+          ? { connect: wordIds.map((wid : number) => ({
+            id: wid })) }
+          : undefined
+      }
+    })
     return reply.status(201).send(newRoot)
   })
 
   // PUT/UPDATE /roots/:id
-  app.put<{ Params: { id: string }; Body: Partial<RootCreateBody> }>(
+  app.put<{ Params: { id: string }; 
+            Body: Partial<RootCreateBody> }>(
     '/:id', async (req, reply) => {
       const id = Number(req.params.id)
+      const {
+        phono, 
+        ortho, 
+        definition, 
+        notes,
+        etymology,
+        wordIds
+      } = req.body
       try {
         const updated = await prisma.root.update({
           where: { id },
-          data: req.body
+          // guarded spreads
+          data:{
+              ...(phono && { phono }),
+              ...(ortho && { ortho }),
+              ...(definition && { definition }),
+              ...(notes && { notes }),
+              ...(etymology && { etymology }),
+              ...(wordIds && { words: 
+                { set: wordIds.map((wid : number) => 
+                ({ id: wid })) } })
+            }
         })
-        return updated
+        return reply.send(updated)
       } catch {
         return reply.status(404).send({ error: 'Not found' })
       }
@@ -70,7 +108,8 @@ const rootsRoutes: FastifyPluginAsync = async (app) => {
   )
 
   // DELETE /roots/:id
-  app.delete<{ Params: { id: string } }>('/:id', async (req, reply) => {
+  app.delete<{ Params: { id: string } }>
+  ('/:id', async (req, reply) => {
     const id = Number(req.params.id)
     try {
       await prisma.root.delete({ where: { id } })
