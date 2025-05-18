@@ -7,7 +7,7 @@ export default function RootsPage() {
   const [newOrtho, setNewOrtho] = useState('')
   const [newType, setNewType] = useState<'stem'|'infl'>('stem')
 
-  console.log('RootsPage render, words =', words, 'loading=', loading)
+  console.log('WordsPage render, words =', words, 'loading=', loading)
 
   if (loading) return <p>Loading…</p>
   if (error)   return <p>Error: {error}</p>
@@ -55,10 +55,10 @@ export default function RootsPage() {
         <select
           value={newType}
           onChange={e => setNewType(e.target.value as 'stem'|'infl')}
+          required
         >
           <option value="stem">stem/derivational morpheme</option>
           <option value="infl">inflectional morpheme</option>    
-          required
         </select>
         <button type="submit">add word</button>
     </form>
