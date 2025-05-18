@@ -1,24 +1,24 @@
 import { FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify'
-import { PrismaClient, Category } from '../../generated/prisma'
+import { PrismaClient, Feature } from '../../generated/prisma'
 
 const prisma = new PrismaClient()
 
-export interface CategoryCreateBody {
+export interface FeatureCreateBody {
   name: string
-  featureIds?: number[]
+  categoryIds?: number[]
   senseIds?: number[]
   // grammar tables later
 }
 
-const categoriesRoutes: FastifyPluginAsync = async (app) => {
+const featuresRoutes: FastifyPluginAsync = async (app) => {
 
   // GET/READ /categories/:id
   app.get<{ Params: { id: string } }>('/:id', async (req, reply) => {
-    const category = await prisma.category.findUnique({
+    const feature = await prisma.feature.findUnique({
       where: { id: Number(req.params.id) }
     })
-    if (!category) return reply.status(404).send({ error: 'Not found' })
-    return category
+    if (!feature) return reply.status(404).send({ error: 'Not found' })
+    return feature
   })
 
   // GET/SEARCH (list=search with empty query)
@@ -32,51 +32,51 @@ const categoriesRoutes: FastifyPluginAsync = async (app) => {
       }
       : {}
 
-    const categories = await prisma.category.findMany({ where })
-    return reply.send(categories)
+    const features = await prisma.feature.findMany({ where })
+    return reply.send(features)
   })
 
-  // POST/CREATE /categories
-  app.post<{ Body: CategoryCreateBody }>('/', async (req, reply) => {
+  // POST/CREATE /features
+  app.post<{ Body: FeatureCreateBody }>('/', async (req, reply) => {
     const {
       name, 
       senseIds, 
-      featureIds
+      categoryIds
     } = req.body
     
-    const newCategory = await prisma.category.create({
+    const newFeature = await prisma.feature.create({
       data: {
         name,
         senses: senseIds
           ? { connect: senseIds.map((sid : number) => ({ 
             id: sid })) } 
             : undefined,
-        features: featureIds
-          ? { connect: featureIds.map((fid : number) => ({ 
-            id: fid })) } 
+        categories: categoryIds
+          ? { connect: categoryIds.map((cid : number) => ({ 
+            id: cid })) } 
             : undefined } 
     })
     
-    return reply.status(201).send(newCategory)
+    return reply.status(201).send(newFeature)
   })
 
   // PUT/UPDATE /categories/:id
-  app.put<{ Params: { id: string }; Body: Partial<CategoryCreateBody> }>(
+  app.put<{ Params: { id: string }; Body: Partial<FeatureCreateBody> }>(
     '/:id', async (req, reply) => {
       const id = Number(req.params.id)
       const {
         name, 
         senseIds, 
-        featureIds
+        categoryIds
       } = req.body
       try {
-        const updated = await prisma.category.update({
+        const updated = await prisma.feature.update({
           where: { id },
           // guarded spreads
           data: {
             ...(name && { name }),
             ...(senseIds && { senses: { set: senseIds.map((sid : number) => ({ id: sid })) } }),
-            ...(featureIds && { features: { set: featureIds.map((fid : number) => ({ id: fid })) } })
+            ...(categoryIds && { categories: { set: categoryIds.map((cid : number) => ({ id: cid })) } })
           }
         })
         return reply.send(updated)
@@ -91,7 +91,7 @@ const categoriesRoutes: FastifyPluginAsync = async (app) => {
   app.delete<{ Params: { id: string } }>('/:id', async (req, reply) => {
     const id = Number(req.params.id)
     try {
-      await prisma.category.delete({ where: { id } })
+      await prisma.feature.delete({ where: { id } })
       return reply.status(204).send()
     } catch {
       return reply.status(404).send({ error: 'Not found' })
@@ -99,4 +99,4 @@ const categoriesRoutes: FastifyPluginAsync = async (app) => {
   })
 }
 
-export default categoriesRoutes
+export default featuresRoutes

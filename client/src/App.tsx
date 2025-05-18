@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom'
 import RootsPage from './pages/RootsPage'
 import WordsPage from './pages/WordsPage'
 import SensesPage from './pages/SensesPage'
+import CategoriesPage from './pages/CategoriesPage'
+import FeaturesPage from './pages/FeaturesPage'
 import './App.css'
 
 export default function App() {
@@ -24,10 +26,8 @@ export default function App() {
         <Route path="/roots" element={<RootsPage />} />
         <Route path="/words" element={<WordsPage />} />
         <Route path="/senses" element={<SensesPage />} />
-        {/* <Route path="/categories" element={<CategoriesPage />} /> */}
-        {/* <Route path="/features" element={<FeaturesPage />} /> */}
-
-        {/* TODO: add Routes for Categories, Features, Words, etc. */}
+        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/features" element={<FeaturesPage />} />
       </Routes>
     </BrowserRouter>
   )

@@ -8,7 +8,7 @@ export interface Category {
   // grammarTables GrammarTable[] later!
 }
 
-export function useSenses() {
+export function useCategories() {
   const [categories,  setCategories]  = useState<Category[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)

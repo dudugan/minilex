@@ -1,18 +1,18 @@
 import React, {useEffect, useState } from 'react'
-import { useSenses } from '../hooks/useSenses'
 import { useCategories } from '../hooks/useCategories'
+import { useSenses } from '../hooks/useSenses'
 import { useFeatures } from '../hooks/useFeatures'
 
-export default function CategoriesPage() {
-  const { categories, loading, error, search, setSearch, reload, createCategory, updateCategory, deleteCategory } = useCategories()
+export default function FeaturesPage() {
+  const { features, loading, error, search, setSearch, reload, createFeature, updateFeature, deleteFeature } = useFeatures()
+  const { categories } = useCategories()
   const { senses } = useSenses()
-  const { features } = useFeatures()
   
   const [newName, setNewName] = useState('')
   const [newSenseIds, setNewSenseIds] = useState<number[]>([])
-  const [newFeatureIds, setNewFeatureIds] = useState<number[]>([])
+  const [newCategoryIds, setNewCategoryIds] = useState<number[]>([])
 
-  console.log('CategoriesPage render, categories =', categories, 'loading=', loading)
+  console.log('FeaturesPage render, features =', features, 'loading=', loading)
 
   if (loading) return <p>Loading…</p>
   if (error)   return <p>Error: {error}</p>
@@ -20,24 +20,24 @@ export default function CategoriesPage() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newName) return
-    await createCategory({ 
+    await createFeature({ 
       name: newName,
       senseIds: newSenseIds.length ? newSenseIds : undefined,
-      featureIds: newFeatureIds.length ? newFeatureIds : undefined
+      categoryIds: newCategoryIds.length ? newCategoryIds : undefined
     })
     setNewName('')
     setNewSenseIds([])
-    setNewFeatureIds([])
+    setNewCategoryIds([])
   }
 
   return (
     <div>
-      <h1>Categories</h1>
+      <h1>Features</h1>
       {/* SEARCH */}
       <div style={{ marginBottom: '1em' }}>
         <input
           type="text"
-          placeholder="search categories"
+          placeholder="search features"
           value={search}
           onChange={e => setSearch(e.target.value)}
           onKeyDown={e => e.key==='Enter' && reload()}
@@ -65,7 +65,7 @@ export default function CategoriesPage() {
           }}
           size={Math.min(5, senses.length)} // show up to 5 rows
         >
-          {senses.map(s => ( // error will resolve once make features
+          {senses.map(s => (
             <option key={s.id} value={s.id}>
               {s.gloss}
             </option>
@@ -73,35 +73,35 @@ export default function CategoriesPage() {
         </select>
         <select
           multiple
-          value={newFeatureIds.map(String)}
+          value={newCategoryIds.map(String)}
           onChange={e => {
             const options = Array.from(
               e.target.selectedOptions, 
               option => Number(option.value))
-            setNewFeatureIds(options)
+            setNewCategoryIds(options)
           }}
           size={Math.min(5, features.length)} // show up to 5 rows
         >
-          {features.map(f => ( // error will resolve once make features
-            <option key={f.id} value={f.id}>
-              {f.name}
+          {categories.map(c => (
+            <option key={c.id} value={c.id}>
+              {c.name}
             </option>
           ))}
         </select>
-        <button type="submit">add category</button>
+        <button type="submit">add feature</button>
     </form>
 
-    {/* LIST OF CATEGORIES */}
+    {/* LIST OF FEATURES */}
     <ul>
-        {categories.map(c => (
-            <li key={c.id} style={{ marginBottom: '0.5em' }}>
-                <strong>{c.name}</strong>
+        {features.map(f => (
+            <li key={f.id} style={{ marginBottom: '0.5em' }}>
+                <strong>{f.name}</strong>
                 <button 
                     style={{ marginLeft: '8' }}
                     onClick={() => {
-                        const newName = prompt('new name?', c.name)
+                        const newName = prompt('new name?', f.name)
                         if (newName !== null) {
-                            updateCategory(c.id, { name: newName })
+                            updateFeature(f.id, { name: newName })
                         }
                     }}
                 >edit name</button>
@@ -109,12 +109,12 @@ export default function CategoriesPage() {
                   senses:
                   <select
                     multiple
-                    value={c.senseIds?.map(String) || []}
+                    value={f.senseIds?.map(String) || []}
                     onChange={e => {
                       const options = Array.from(
                         e.target.selectedOptions, 
                         option => Number(option.value))
-                      updateCategory(c.id, { senseIds: options })
+                      updateFeature(f.id, { senseIds: options })
                     }}
                     size={Math.min(5, senses.length)} // show up to 5 rows
                   >
@@ -126,21 +126,21 @@ export default function CategoriesPage() {
                   </select>
                 </label>
                 <label style={{ display: 'block', marginTop: '8' }}>
-                  features:
+                  categories:
                   <select
                     multiple
-                    value={c.featureIds?.map(String) || []}
+                    value={f.categoryIds?.map(String) || []}
                     onChange={e => {
                       const options = Array.from(
                         e.target.selectedOptions, 
                         option => Number(option.value))
-                      updateCategory(c.id, { featureIds: options })
+                      updateFeature(f.id, { categoryIds: options })
                     }}
-                    size={Math.min(5, features.length)} // show up to 5 rows
+                    size={Math.min(5, categories.length)} // show up to 5 rows
                   >
-                    {features.map(f => (
-                      <option key={f.id} value={f.id}>
-                        {f.name}
+                    {features.map(c => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
                       </option>
                     ))}
                   </select>
@@ -148,8 +148,8 @@ export default function CategoriesPage() {
                 <button 
                     style={{ marginLeft: '0.5em' }}
                     onClick={() => {
-                        if (confirm(`delete category “${c.name}”?`)) {
-                            deleteCategory(c.id)
+                        if (confirm(`delete feature “${f.name}”?`)) {
+                            deleteFeature(f.id)
                         }
                     }}
                 >delete</button>

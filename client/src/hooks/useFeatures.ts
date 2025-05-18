@@ -1,28 +1,28 @@
 import { useState, useEffect, useCallback } from 'react'
 
-export interface Category {
+export interface Feature {
   id: number
   name: string
   senseIds?: number[]
-  featureIds?: number[]
+  categoryIds?: number[]
   // grammarTables GrammarTable[] later!
 }
 
-export function useSenses() {
-  const [categories,  setCategories]  = useState<Category[]>([])
+export function useFeatures() {
+  const [features,  setFeatures]  = useState<Feature[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState<string>('')
 
-  const fetchCategories = useCallback(async () => {
+  const fetchFeatures = useCallback(async () => {
     setLoading(true); setError(null)
     try {
         const url = search
-            ? `/api/categories?search=${encodeURIComponent(search)}`
-            : '/api/categories'
+            ? `/api/features?search=${encodeURIComponent(search)}`
+            : '/api/features'
         const res = await fetch(url)
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    setCategories(await res.json())
+    setFeatures(await res.json())
     } catch (err: any) {
       setError(err.message || 'Unknown error')
     } finally {
@@ -31,36 +31,36 @@ export function useSenses() {
   }, [search])
 
   useEffect(() => {
-    fetchCategories()
-  }, [fetchCategories])
+    fetchFeatures()
+  }, [fetchFeatures])
 
-  // CREATE CATEGORY
-    const createCategory = async (data: Omit<Category, 'id'>) => {
-      await fetch('/api/categories', {
+  // CREATE FEATURE
+    const createFeature = async (data: Omit<Feature, 'id'>) => {
+      await fetch('/api/features', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       })
-      await fetchCategories()
+      await fetchFeatures()
     }
 
     // UPDATE ROOT
-    const updateCategory = async (id: number, data: Partial<Omit<Category, 'id'>>) => {
-      await fetch(`/api/categories/${id}`, {
+    const updateFeature = async (id: number, data: Partial<Omit<Feature, 'id'>>) => {
+      await fetch(`/api/features/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       })
-      await fetchCategories()
+      await fetchFeatures()
     }
 
     // DELETE ROOT
-    const deleteCategory = async (id: number) => {
-        await fetch(`/api/categories/${id}`, {
+    const deleteFeature = async (id: number) => {
+        await fetch(`/api/features/${id}`, {
             method: 'DELETE',
         })
-        await fetchCategories() 
+        await fetchFeatures() 
     }
 
-  return { categories, loading, error, search, setSearch, reload: fetchCategories, createCategory, updateCategory, deleteCategory }  
+  return { features, loading, error, search, setSearch, reload: fetchFeatures, createFeature, updateFeature, deleteFeature }  
 }
