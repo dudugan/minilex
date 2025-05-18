@@ -33,9 +33,9 @@ const rootsRoutes: FastifyPluginAsync = async (app) => {
     const where = search 
       ? {
         OR: [
-          { phono: { contains: search, mode: 'insensitive' } },
-          { ortho: { contains: search, mode: 'insensitive' } },
-          { definition: { contains: search, mode: 'insensitive' } }
+          { phono: { contains: search } },
+          { ortho: { contains: search } },
+          { definition: { contains: search } }
         ]
       }
       : {}
