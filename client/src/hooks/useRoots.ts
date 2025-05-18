@@ -13,23 +13,24 @@ export function useRoots() {
   const [roots, setRoots] = useState<Root[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
-//   const API_BASE = 'http://localhost:3000'
+  const [search, setSearch] = useState<string>('')
 
   const fetchRoots = useCallback(async () => {
     setLoading(true); 
     setError(null)
     try {
-      const res = await fetch('/api/roots')
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    //   const data: Root[] = await res.json()
-    //   setRoots(data)
+        const url = search
+            ? `/api/roots?search=${encodeURIComponent(search)}`
+            : '/api/roots'
+        const res = await fetch(url)
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
     setRoots(await res.json())
     } catch (err: any) {
       setError(err.message || 'Unknown error')
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [search])
 
   useEffect(() => {
     fetchRoots()
@@ -62,5 +63,5 @@ export function useRoots() {
         await fetchRoots() 
     }
 
-  return { roots, loading, error, reload: fetchRoots, createRoot, updateRoot, deleteRoot }  
+  return { roots, loading, error, search, setSearch, reload: fetchRoots, createRoot, updateRoot, deleteRoot }  
 }

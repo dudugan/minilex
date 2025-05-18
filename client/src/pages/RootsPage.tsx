@@ -2,7 +2,7 @@ import React, {useState } from 'react'
 import { useRoots } from '../hooks/useRoots'
 
 export default function RootsPage() {
-  const { roots, loading, error, createRoot, updateRoot, deleteRoot, reload } = useRoots()
+  const { roots, loading, error, search, setSearch, reload, createRoot, updateRoot, deleteRoot } = useRoots()
   const [newPhono, setNewPhono] = useState('')
   const [newOrtho, setNewOrtho] = useState('')
   const [newDefinition, setNewDefinition] = useState('')
@@ -24,6 +24,18 @@ export default function RootsPage() {
   return (
     <div>
       <h1>Roots</h1>
+      {/* SEARCH */}
+      <div style={{ marginBottom: '1em' }}>
+        <input
+          type="text"
+          placeholder="search roots by any field"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          onKeyDown={e => e.key==='Enter' && reload()}
+        /> 
+        <button onClick={reload}>search</button>
+      </div>
+
       {/* CREATE */}
       <form onSubmit={handleCreate} style={{ marginBottom: '1em' }}>
         <input

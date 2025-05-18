@@ -13,10 +13,10 @@ export interface RootCreateBody {
 
 const rootsRoutes: FastifyPluginAsync = async (app) => {
   // GET/READ /roots
-  app.get('/', async (_req, reply: FastifyReply) => {
-    const roots = await prisma.root.findMany()
-    return reply.send(roots)
-  })
+  // app.get('/', async (_req, reply: FastifyReply) => {
+  //   const roots = await prisma.root.findMany()
+  //   return reply.send(roots)
+  // })
 
   // GET/READ /roots/:id
   app.get<{ Params: { id: string } }>('/:id', async (req, reply) => {
@@ -25,6 +25,23 @@ const rootsRoutes: FastifyPluginAsync = async (app) => {
     })
     if (!root) return reply.status(404).send({ error: 'Not found' })
     return root
+  })
+
+  // GET/SEARCH (list=search with empty query)
+  app.get<{ Querystring: { search?: string } }>('/', async (req, reply) => {
+    const { search } = req.query
+    const where = search 
+      ? {
+        OR: [
+          { phono: { contains: search, mode: 'insensitive' } },
+          { ortho: { contains: search, mode: 'insensitive' } },
+          { definition: { contains: search, mode: 'insensitive' } }
+        ]
+      }
+      : {}
+
+    const roots = await prisma.root.findMany({ where })
+    return reply.send(roots)
   })
 
   // POST/CREATE /roots
