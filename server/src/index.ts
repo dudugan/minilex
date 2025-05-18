@@ -2,6 +2,7 @@ import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { PrismaClient } from '../generated/prisma'
 import rootsRoutes from './routes/roots'
+import wordsRoutes from './routes/words'
 
 const app = Fastify({ logger: true })
 app.register(cors, { origin: true })
@@ -17,15 +18,10 @@ const prisma = new PrismaClient()
 
 // Mount all /roots routes under /api/roots
 app.register(rootsRoutes, { prefix: '/api/roots' })
+// Mount all /words routes under /api/words
+app.register(wordsRoutes, { prefix: '/api/words' })
 
 // other routes here
-
-
-// A simple GET endpoint to fetch all roots
-// app.get('/roots', async (request, reply) => {
-//   const roots = await prisma.root.findMany()
-//   return roots
-// })
 
 // Start the server
 const start = async () => {
