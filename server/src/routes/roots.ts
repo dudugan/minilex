@@ -35,7 +35,9 @@ const rootsRoutes: FastifyPluginAsync = async (app) => {
         OR: [
           { phono: { contains: search } },
           { ortho: { contains: search } },
-          { definition: { contains: search } }
+          { definition: { contains: search } }, 
+          { notes: { contains: search } },
+          { etymology: { contains: search } }
         ]
       }
       : {}
