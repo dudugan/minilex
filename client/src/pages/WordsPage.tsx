@@ -1,7 +1,7 @@
 import React, {useState } from 'react'
 import { useWords } from '../hooks/useWords'
 
-export default function RootsPage() {
+export default function WordsPage() {
   const { words, loading, error, search, setSearch, reload, createWord, updateWord, deleteWord } = useWords()
   const [newPhono, setNewPhono] = useState('')
   const [newOrtho, setNewOrtho] = useState('')
@@ -109,13 +109,13 @@ export default function RootsPage() {
 
 
       <button onClick={reload}>refresh</button>
-      <ul>
+      {/* <ul>
         {words.map(w => (
           <li key={w.id}>
             {w.ortho} — {w.phono} : {w.type}
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   )
 }

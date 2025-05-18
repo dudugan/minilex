@@ -4,7 +4,7 @@ import { useCategories } from '../hooks/useCategories'
 import { useFeatures } from '../hooks/useFeatures'
 import { useWords } from '../hooks/useWords'
 
-export default function RootsPage() {
+export default function SensesPage() {
   const { senses, loading, error, search, setSearch, reload, createSense, updateSense, deleteSense } = useSenses()
   const { words } = useWords()
   const { categories } = useCategories()
@@ -226,13 +226,6 @@ export default function RootsPage() {
 
 
       <button onClick={reload}>refresh</button>
-      <ul>
-        {words.map(w => (
-          <li key={w.id}>
-            {w.ortho} — {w.phono} : {w.type}
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }

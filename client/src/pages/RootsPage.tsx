@@ -108,13 +108,6 @@ export default function RootsPage() {
 
 
       <button onClick={reload}>refresh</button>
-      <ul>
-        {roots.map(r => (
-          <li key={r.id}>
-            {r.ortho} — {r.phono} {r.definition && `: ${r.definition}`}
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }
