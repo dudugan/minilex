@@ -4,6 +4,8 @@ import { PrismaClient } from '../generated/prisma'
 import rootsRoutes from './routes/roots'
 import wordsRoutes from './routes/words'
 import sensesRoutes from './routes/senses'
+import categoriesRoutes from './routes/categories'
+import featuresRoutes from './routes/features'
 
 const app = Fastify({ logger: true })
 app.register(cors, { origin: true })
@@ -23,6 +25,10 @@ app.register(rootsRoutes, { prefix: '/api/roots' })
 app.register(wordsRoutes, { prefix: '/api/words' })
 // Mount all /senses routes under /api/senses
 app.register(sensesRoutes, { prefix: '/api/senses' })
+// Mount all /categories routes under /api/categories
+app.register(categoriesRoutes, { prefix: '/api/categories' })
+// Mount all /features routes under /api/features
+app.register(featuresRoutes, { prefix: '/api/features' })
 
 // other routes here
 
