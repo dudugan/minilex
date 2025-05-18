@@ -13,6 +13,9 @@ export default function App() {
   return (
     <BrowserRouter>
       {/* You can add a Nav here later */}
+      <nav>
+        <a href="/roots">Roots</a> | <a href="/words">Words</a>
+      </nav>
       <Routes>
         {/* Redirect the root URL to /roots -- prev. no 'replace' */}
         <Route path="/" element={<Navigate to="/roots" replace />} />
