@@ -5,8 +5,8 @@ export interface Word {
   phono: string
   ortho: string
   type: 'stem' | 'infl'
-  // later add roots?: Root[]
-  // and senses?: Sense[]
+  rootIds?: number[]
+  senseIds?: number[]
 }
 
 export function useWords() {

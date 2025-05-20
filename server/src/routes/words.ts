@@ -7,7 +7,8 @@ export interface WordCreateBody {
   phono: string
   ortho: string
   type: 'stem' | 'infl'
-  // later can add rootIds?: number[] and senseIds?: number[]
+  rootIds?: number[] 
+  senseIds?: number[]
 }
 
 const wordsRoutes: FastifyPluginAsync = async (app) => {
@@ -40,8 +41,18 @@ const wordsRoutes: FastifyPluginAsync = async (app) => {
 
   // POST/CREATE /words
   app.post<{ Body: WordCreateBody }>('/', async (req, reply) => {
-    const data = req.body
-    const newWord = await prisma.word.create({ data })
+    const { phono, ortho, type, rootIds, senseIds } = req.body
+    const newWord = await prisma.word.create({
+      data: {
+        phono,
+        ortho,
+        type,
+        roots: rootIds ? { connect: rootIds.map((rid: number) => 
+            ({ id: rid })) } : undefined,
+        senses: senseIds ? { connect: senseIds.map((sid: number) =>
+            ({ id: sid })) } : undefined
+      }
+     })
     return reply.status(201).send(newWord)
   })
 
@@ -49,12 +60,25 @@ const wordsRoutes: FastifyPluginAsync = async (app) => {
   app.put<{ Params: { id: string }; Body: Partial<WordCreateBody> }>(
     '/:id', async (req, reply) => {
       const id = Number(req.params.id)
+      const { phono, ortho, type, rootIds, senseIds } = req.body
       try {
         const updated = await prisma.word.update({
           where: { id },
-          data: req.body
+          // guarded spreads
+          data: {
+            ...(phono && { phono }),
+            ...(ortho && { ortho }),
+            ...(type && { type }),
+            ...(rootIds && {roots: {
+                set: rootIds.map((rid: number) => ({ id: rid }))
+            }}),
+            ...(senseIds && {
+              senses: {
+                set: senseIds.map((sid: number) => ({ id: sid }))
+            }})
+          }
         })
-        return updated
+        return reply.send(updated)
       } catch {
         return reply.status(404).send({ error: 'Not found' })
       }

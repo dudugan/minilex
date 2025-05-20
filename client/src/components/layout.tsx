@@ -6,55 +6,54 @@ import './layout.css'
 
 // MASTER LAYOUT
 export default function Layout({ children }: { children: ReactNode }) {
+
+    // HELPERS
     const [searchTerm, setSearchTerm] = useState('')
     const [showModal, setShowModal] = useState(false)
     const navigate = useNavigate()
-
-    // SEARCHING
     const onSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {  
         if (e.key === 'Enter') {
             // navigate(`/search/${searchTerm}`)
-            navigate(`?search=${encodeURIComponent(searchTerm)}`)
-        }
-    }
+            navigate(`?search=${encodeURIComponent(searchTerm)}`)}}
 
+    // LAYOUT
     return (
-        <div className="layout">
-            <header className="top">
+    <div className="layout">
+        <header className="top">
 
-                {/* VIEWNAME */}
-                <h1>viewname</h1>
+            {/* VIEWNAME */}
+            <h1>viewname</h1>
 
-                {/* SEARCH BAR */}
-                <input 
-                    className="search"
-                    type="text"
-                    placeholder="search"
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                    onKeyDown={onSearchKeyDown}
-                />
+            {/* SEARCH BAR */}
+            <input 
+                className="search"
+                type="text"
+                placeholder="search"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                onKeyDown={onSearchKeyDown}
+            />
 
-                {/* CREATE BUTTON */}
-                <button 
-                    className="create" 
-                    onClick={() => setShowModal(true)}
-                >new entry
-                </button>
-            </header>
-            <main className="content">
+            {/* CREATE BUTTON */}
+            <button 
+                className="create" 
+                onClick={() => setShowModal(true)}
+            >new entry
+            </button>
+        </header>
+        <main className="content">
 
-                {/* TABLE */}
-                <div className="table">{children}</div>
+            {/* TABLE */}
+            <div className="table">{children}</div>
 
-                {/* SIDEBAR */}
-                <Sidebar />
+            {/* SIDEBAR */}
+            <Sidebar />
 
-            </main>
+        </main>
 
-            {/* POPUP */}
-            {showModal && <CreateModal onClose={() => setShowModal(false)} />}
-        </div>
+        {/* POPUP */}
+        {showModal && <CreateModal onClose={() => setShowModal(false)} />}
+    </div>
     )
 }
 
@@ -91,15 +90,16 @@ function Sidebar() {
 }
 
 // TABLE
-interface Column {
-    key: string
-    label: string
+export interface Column<T> {
+  key: Extract<keyof T, string>
+  label: string
+  render?: (row: T) => React.ReactNode
 }
 interface Properties<T> {
-    columns: Column[]
+    columns: Column<T>[]
     data: T[]
     onRowClick: (id: number) => void
-    onFieldUpdate: (id: number, key: string, value: any) => void
+    onFieldUpdate: (id: number, key: keyof T, value: any) => void
 }
 export function Table<T extends {
         id: number}>({ columns, data, onRowClick, onFieldUpdate }: Properties<T>) 
@@ -131,6 +131,9 @@ export function Table<T extends {
                             onDoubleClick={() => onHeaderDoubleClick(idx)}
                         >
                             {col.label}
+                            {/* {col.render 
+                            ? col.render(row) 
+                            : (row as any)[col.key]} */}
                         </th>
                     ))}
                 </tr>
@@ -140,7 +143,7 @@ export function Table<T extends {
                     <tr key={row.id} onClick={() => onRowClick(row.id)}>
                         {columns.map(col => (
                             <td key={col.key}
-                                onDoubleClick={e => {
+                                onDoubleClick={() => {
                                     const current = (row as any)[col.key]
                                     const newValue = prompt(`Edit ${col.label}`, 
                                         String(current))

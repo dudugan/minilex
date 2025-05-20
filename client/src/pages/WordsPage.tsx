@@ -1,121 +1,69 @@
-import React, {useState } from 'react'
-import { useWords } from '../hooks/useWords'
+import React, { useState } from 'react'
+import Layout, { Table, type Column } from '../components/layout'
+import { useWords, type Word} from '../hooks/useWords'
 
-export default function WordsPage() {
-  const { words, loading, error, search, setSearch, reload, createWord, updateWord, deleteWord } = useWords()
-  const [newPhono, setNewPhono] = useState('')
-  const [newOrtho, setNewOrtho] = useState('')
-  const [newType, setNewType] = useState<'stem'|'infl'>('stem')
+interface WordRow {
+  id:    number
+  ortho: string
+  senses: string
+  type:  'stem'|'infl'
+  phono: string
+  roots: string    // comma-joined list of orthographic forms
+}
 
-  console.log('WordsPage render, words =', words, 'loading=', loading)
+const columns: Column<WordRow>[]  = [
+  { key: 'ortho', label: '<orthographic>' },
+  { key: 'senses', label: 'senses' },
+  { key: 'type', label: 'type' },
+  { key: 'phono', label: '/phonemic/' },
+  { key: 'roots', label: 'roots' },
 
-  if (loading) return <p>Loading…</p>
-  if (error)   return <p>Error: {error}</p>
+  // { key: 'rootIds', label: 'roots',
+  //   render: (w: Word & { roots: { ortho: string }[] }) =>
+  //     w.roots.map(r => r.ortho).join(', ')
+  // }, 
+  // { key: 'senseIds', label: 'senses',
+  //   render: (w: Word) => w.senseIds?.map(s => s).join(', ')
+  // }
+]; 
 
-  const handleCreate = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newPhono || !newOrtho) return
-    await createWord({ phono: newPhono, ortho: newOrtho, type: newType })
-    setNewPhono('')
-    setNewOrtho('')
-    setNewType('stem')
-  }
+export default function wordsPage() {
+    const {words, loading, error, updateWord, reload,
+  } = useWords();
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const rows: WordRow[] = words.map(w => ({
+    id:    w.id,
+    phono: w.phono,
+    ortho: w.ortho,
+    type:  w.type,
+    senses: w.senseIds?.map(s => s).join(', '),
+    roots: w.rootIds.map(r => r.ortho).join(', '),
+  }))
+
+
+
+  const onRowClick = (id: number) => {
+    setSelectedId(prev => (prev === id ? null : id));
+  };
+
+  // update a single field by double click
+  const onFieldUpdate = (id: number, key: string, value: any) => {
+    updateWord(id, { [key]: value });
+  };
 
   return (
-    <div>
-      <h1>Words</h1>
-      {/* SEARCH */}
-      <div style={{ marginBottom: '1em' }}>
-        <input
-          type="text"
-          placeholder="search words by any field"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          onKeyDown={e => e.key==='Enter' && reload()}
-        /> 
-        <button onClick={reload}>search</button>
-      </div>
-
-      {/* CREATE */}
-      <form onSubmit={handleCreate} style={{ marginBottom: '1em' }}>
-        <input
-          type="text"
-          placeholder="phonological form"
-          value={newPhono}
-          onChange={e => setNewPhono(e.target.value)}
-          required
+    <Layout>
+      {loading && <p>Loading…</p>}
+      {error   && <p>Error: {error}</p>}
+      {!loading && !error && (
+        <Table
+          columns={columns}
+          data={words}
+          onRowClick={onRowClick}
+          onFieldUpdate={onFieldUpdate}
         />
-        <input
-          type="text"
-          placeholder="orthographic form"
-          value={newOrtho}
-          onChange={e => setNewOrtho(e.target.value)}
-          required
-        />
-        <select
-          value={newType}
-          onChange={e => setNewType(e.target.value as 'stem'|'infl')}
-          required
-        >
-          <option value="stem">stem/derivational morpheme</option>
-          <option value="infl">inflectional morpheme</option>    
-        </select>
-        <button type="submit">add word</button>
-    </form>
-
-    {/* LIST OF WORDS */}
-    <ul>
-        {words.map(w => (
-            <li key={w.id} style={{ marginBottom: '0.5em' }}>
-                {w.ortho} — {w.phono} : {w.type}
-                <button 
-                    style={{ marginLeft: '0.5em' }}
-                    onClick={() => {
-                        const newType = prompt('new type?', w.type) as 'stem'|'infl'
-                        if (newType !== null) {
-                            updateWord(w.id, { type: newType })
-                        }
-                    }}
-                >edit type</button>
-                <button 
-                    style={{ marginLeft: '0.5em' }}
-                    onClick={() => {
-                        const newPhono = prompt('new phonological form?', w.phono || '')
-                        if (newPhono !== null) {
-                            updateWord(w.id, { phono: newPhono })
-                        }
-                    }}
-                >edit ph. form</button>
-                <button 
-                    style={{ marginLeft: '0.5em' }}
-                    onClick={() => {
-                        const newOrtho = prompt('new orthographical form?', w.ortho || '')
-                        if (newOrtho !== null) {
-                            updateWord(w.id, { ortho: newOrtho })
-                        }
-                    }}
-                >edit orth. form</button>
-                <button 
-                    style={{ marginLeft: '0.5em' }}
-                    onClick={() => {
-                        if (confirm(`delete word “${w.ortho}”?`)) {
-                            deleteWord(w.id)
-                        }
-                    }}
-                >delete</button>
-            </li>
-            ))}
-    </ul>
-
-
-      <button onClick={reload}>refresh</button>
-      {/* <ul>
-        {words.map(w => (
-          <li key={w.id}>
-            {w.ortho} — {w.phono} : {w.type}
-          </li>
-        ))}
-      </ul> */}
-    </div>
-  )
+      )}
+    </Layout>
+  );
 }
